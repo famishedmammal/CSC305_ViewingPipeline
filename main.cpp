@@ -20,6 +20,7 @@ float near = 1.0f;
 float far = 10.0f;
 std::vector<Vector4d> pointList;
 Matrix4d perspectiveMatrix;
+Matrix4d M0;
 Vector3d eyePosition_perm(1, 0, 0);
 
 void MouseMove(double x, double y)
@@ -57,23 +58,6 @@ void DrawCube()
                  0, 0, 1, -eyePosition[2],
                  0, 0, 0, 1;
         Matrix4d MV = MVrot*temp;
-
-        // Calculate m0
-        float r = 1.0f;
-        float t = 1.0f;
-        float b = -1.0f;
-        float l = -1.0f;
-        Matrix4d M0;
-        M0 <<
-              2/(r-l), 0, 0, -((r+l)/(r-l)),
-              0, 2/(t-b), 0, -((t+b)/(t-b)),
-              0, 0, 2/(near-far), -((near+far)/(near-far)),
-              0, 0, 0, 1;
-        /*M0 <<
-              1, 0, 0, 0,
-              0, 1, 0, 0,
-              0, 0, 1, 0,
-              0, 0, 0, 1;*/
 
         // Calculate the rest.
         Matrix4d M = M0*perspectiveMatrix*MV;
@@ -160,6 +144,15 @@ int main(int, char **){
         0, 1, 0, 0,
         0, 0, (near+far)/near, -far,
         0, 0, 1/near, 0; //change last to 1?
+    float r = 1.0f;
+    float t = 1.0f;
+    float b = -1.0f;
+    float l = -1.0f;
+    M0 <<
+        2/(r-l), 0, 0, -((r+l)/(r-l)),
+        0, 2/(t-b), 0, -((t+b)/(t-b)),
+        0, 0, 2/(near-far), -((near+far)/(near-far)),
+        0, 0, 0, 1;
 
     //Link the call backs
     canvas.SetMouseMove(MouseMove);
